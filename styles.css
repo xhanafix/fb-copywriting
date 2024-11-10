@@ -1,0 +1,399 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+h1 {
+    text-align: center;
+    color: #1877f2;
+    margin-bottom: 2rem;
+}
+
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button {
+    background-color: #1877f2;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    transition: background-color 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background-color: #166fe5;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+button:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+.result-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.copy-result {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 100px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.copy-result:hover {
+    background-color: #f8f9fa;
+}
+
+.loading {
+    text-align: center;
+    color: #1877f2;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+.copy-button {
+    margin-top: 1rem;
+    background-color: #42b72a;
+}
+
+.copy-button:hover {
+    background-color: #36a420;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+    transition: all 0.3s ease;
+}
+
+.input-group input:hover,
+.input-group textarea:hover,
+.input-group select:hover {
+    border-color: #1877f2;
+}
+
+.loading::after {
+    content: '...';
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+
+@keyframes success {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.copy-button.success {
+    animation: success 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 1rem auto;
+    }
+
+    .form-container,
+    .result-container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #18191a;
+        color: #e4e6eb;
+    }
+
+    .form-container,
+    .result-container {
+        background: #242526;
+    }
+
+    input, textarea, select {
+        background-color: #3a3b3c;
+        color: #e4e6eb;
+        border-color: #3a3b3c;
+    }
+
+    .copy-result:hover {
+        background-color: #3a3b3c;
+    }
+}
+
+.api-hint {
+    display: none;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+#openaiHint {
+    display: block;
+}
+
+.input-group select#apiProvider {
+    margin-bottom: 0.5rem;
+}
+
+.api-hint a {
+    color: #1877f2;
+    text-decoration: none;
+}
+
+.api-hint a:hover {
+    text-decoration: underline;
+}
+
+@media (prefers-color-scheme: dark) {
+    .api-hint {
+        color: #999;
+    }
+}
+
+/* Add these styles for the share buttons */
+.share-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.share-container h3 {
+    margin-bottom: 1rem;
+    color: #1877f2;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.share-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.share-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+.share-button.twitter {
+    background-color: #000000;
+}
+
+.share-button.twitter:hover {
+    background-color: #333333;
+}
+
+.share-button.linkedin {
+    background-color: #0077b5;
+}
+
+.share-button.linkedin:hover {
+    background-color: #006396;
+}
+
+.share-button.facebook {
+    background-color: #1877f2;
+}
+
+.share-button.facebook:hover {
+    background-color: #166fe5;
+}
+
+@media (prefers-color-scheme: dark) {
+    .share-container {
+        background: #242526;
+    }
+}
+
+@media (max-width: 600px) {
+    .share-buttons {
+        flex-direction: column;
+    }
+    
+    .share-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Add these to your existing share button styles */
+.share-button.whatsapp {
+    background-color: #25D366;
+}
+
+.share-button.whatsapp:hover {
+    background-color: #20bd5a;
+}
+
+.share-button.telegram {
+    background-color: #0088cc;
+}
+
+.share-button.telegram:hover {
+    background-color: #0077b3;
+}
+
+/* Add these styles for pain point suggestions */
+.pain-point-suggestions {
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.suggestion {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestion:hover {
+    background-color: #f0f2f5;
+}
+
+@media (prefers-color-scheme: dark) {
+    .pain-point-suggestions {
+        background: #242526;
+        border-color: #3a3b3c;
+    }
+
+    .suggestion:hover {
+        background-color: #3a3b3c;
+    }
+}
+
+/* Make the pain point input container relative for absolute positioning of suggestions */
+.input-group {
+    position: relative;
+}
+
+/* Add these to your existing pain point suggestions styles */
+.suggestion.loading {
+    color: #1877f2;
+    font-style: italic;
+}
+
+.suggestion.error {
+    color: #dc3545;
+    font-style: italic;
+}
+
+.pain-point-suggestions {
+    /* ... existing styles ... */
+    background: white;
+    z-index: 1000;
+}
+  
