@@ -326,34 +326,61 @@ document.addEventListener('DOMContentLoaded', () => {
                     model: selectedAPI.model,
                     messages: [{
                         role: "system",
-                        content: `You are a professional copywriter who writes in ${languageName}. 
-                                 Always respond in ${languageName} only.`
+                        content: language === 'ms' ? 
+                            `Anda adalah seorang pakar pengiklan profesional yang mahir dalam penulisan iklan dalam Bahasa Malaysia. 
+                             Gunakan tatabahasa dan struktur ayat Bahasa Malaysia yang betul dan formal.
+                             Elakkan penggunaan Bahasa Melayu pasar atau bahasa campuran.
+                             Pastikan penggunaan imbuhan dan kata hubung yang tepat.
+                             Gunakan istilah pemasaran dalam Bahasa Malaysia yang standard.` 
+                            : 
+                            `You are a professional copywriter who writes in ${languageName}. 
+                             Always respond in ${languageName} only.`
                     },
                     {
                         role: "user",
-                        content: `Act as a world class copywriter. Write a Facebook ad copy in ${languageName} for this product/service: ${product}. 
-                                 Target audience pain point: ${painPoint}
-                                 ${formulaContexts[formula]}
-                                 Tone of voice: ${tone}
+                        content: language === 'ms' ?
+                            `Tuliskan salinan iklan Facebook untuk produk/perkhidmatan ini: ${product}. 
+                             Masalah pelanggan sasaran: ${painPoint}
+                             ${formulaContexts[formula]}
+                             Nada suara: ${tone}
 
-                                 Important instructions:
-                                 1. Start with strong hookline to grab attention
-                                 2. The entire response MUST be in ${languageName} only
-                                 3. Write in a conversational, human-like tone
-                                 4. Add suitable emojis to make the copy engaging
-                                 5. Use short paragraphs and make it scannable
-                                 6. Make it feel personal and relatable
-                                 7. Avoid corporate jargon
-                                 8. Include a clear call-to-action in ${languageName}
-                                 9. Follow the selected formula structure strictly
-                                 
-                                 For Bahasa Malaysia: Use casual Malaysian style
-                                 For Tamil: Use proper Tamil grammar and script
-                                 For Chinese: Use Simplified Chinese characters
-                                 
-                                 Please provide a compelling and conversion-focused ad copy.`
+                             Arahan penting:
+                             1. Mulakan dengan ayat pembuka yang menarik perhatian
+                             2. Gunakan Bahasa Malaysia yang standard dan betul
+                             3. Tulis dalam nada yang mesra dan mudah difahami
+                             4. Masukkan emoji yang sesuai untuk menarik perhatian
+                             5. Gunakan perenggan pendek dan mudah dibaca
+                             6. Buat kandungan yang peribadi dan relevan
+                             7. Elakkan penggunaan bahasa teknikal yang rumit
+                             8. Sertakan seruan untuk bertindak yang jelas
+                             9. Ikut struktur formula yang dipilih dengan tepat
+                             
+                             Panduan tambahan:
+                             - Gunakan "anda" bukan "awak" atau "kamu"
+                             - Gunakan imbuhan yang betul (ber-, ter-, me-, dll)
+                             - Pastikan susunan ayat subjek-predikat yang betul
+                             - Gunakan kata hubung yang sesuai
+                             - Kekalkan konsistensi dalam penggunaan istilah
+                             
+                             Sila hasilkan salinan iklan yang meyakinkan dan fokus pada penukaran.`
+                            :
+                            `Act as a world class copywriter. Write a Facebook ad copy in ${languageName} for this product/service: ${product}. 
+                             Target audience pain point: ${painPoint}
+                             ${formulaContexts[formula]}
+                             Tone of voice: ${tone}
+
+                             Important instructions:
+                             1. Start with strong hookline to grab attention
+                             2. The entire response MUST be in ${languageName} only
+                             3. Write in a conversational, human-like tone
+                             4. Add suitable emojis to make the copy engaging
+                             5. Use short paragraphs and make it scannable
+                             6. Make it feel personal and relatable
+                             7. Avoid corporate jargon
+                             8. Include a clear call-to-action in ${languageName}
+                             9. Follow the selected formula structure strictly`
                     }],
-                    temperature: 0.8
+                    temperature: 0.7
                 })
             });
 
