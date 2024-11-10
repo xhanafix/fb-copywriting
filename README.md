@@ -1,6 +1,6 @@
 # Facebook Ads Copy Generator
 
-A powerful web application that generates compelling Facebook ad copy using multiple AI providers (OpenAI, Groq, OpenRouter, or Google Gemini). This tool helps marketers and business owners create effective ad copy based on proven copywriting formulas, with support for multiple languages and customizable tone of voice.
+A powerful web application that generates compelling Facebook ad copy using multiple AI providers (OpenAI, Groq, or OpenRouter). This tool helps marketers and business owners create effective ad copy based on proven copywriting formulas, with support for multiple languages and customizable tone of voice.
 
 ## 🌟 Features
 
@@ -8,7 +8,6 @@ A powerful web application that generates compelling Facebook ad copy using mult
   - OpenAI (GPT-3.5-turbo)
   - Groq (Mixtral-8x7b)
   - OpenRouter (Various models)
-  - Google Gemini (Gemini Pro)
 - Auto-generated pain points based on product/service
 - Interactive loading animation with pencil effect
 - 14 proven copywriting formulas
@@ -40,7 +39,6 @@ A powerful web application that generates compelling Facebook ad copy using mult
    - OpenAI: Get API key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
    - Groq: Get API key from [console.groq.com/keys](https://console.groq.com/keys)
    - OpenRouter: Get API key from [openrouter.ai/keys](https://openrouter.ai/keys)
-   - Google Gemini: Get API key from [makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)
 
 3. Enter your API key
 4. Fill in your product/service details
@@ -51,7 +49,6 @@ A powerful web application that generates compelling Facebook ad copy using mult
 
 ## ✨ New Features
 
-- Google Gemini API integration
 - Auto-generated pain points
 - Enhanced loading animation
 - Improved Bahasa Malaysia output

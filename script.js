@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const openaiHint = document.getElementById('openaiHint');
     const groqHint = document.getElementById('groqHint');
     const openrouterHint = document.getElementById('openrouterHint');
-    const geminiHint = document.getElementById('geminiHint');
 
     // Add event listener for API provider change
     document.getElementById('apiProvider').addEventListener('change', (e) => {
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openaiHint.style.display = 'none';
         groqHint.style.display = 'none';
         openrouterHint.style.display = 'none';
-        geminiHint.style.display = 'none';
 
         // Show the selected provider's hint
         switch(e.target.value) {
@@ -25,9 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'openrouter':
                 openrouterHint.style.display = 'block';
-                break;
-            case 'gemini':
-                geminiHint.style.display = 'block';
                 break;
         }
     });
