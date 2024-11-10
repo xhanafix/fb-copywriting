@@ -172,6 +172,27 @@ async function generatePainPoints(product, apiKey, provider) {
                 'X-Title': 'FB Ads Copy Generator'
             },
             model: 'mistralai/mixtral-8x7b-instruct'
+        },
+        gemini: {
+            url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            getUrl: (apiKey) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+            formatRequest: (messages) => ({
+                contents: [{
+                    parts: [{
+                        text: messages.map(m => `${m.role}: ${m.content}`).join('\n\n')
+                    }]
+                }]
+            }),
+            formatResponse: (data) => ({
+                choices: [{
+                    message: {
+                        content: data.candidates[0].content.parts[0].text
+                    }
+                }]
+            })
         }
     };
 
@@ -221,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openaiHint = document.getElementById('openaiHint');
     const groqHint = document.getElementById('groqHint');
     const openrouterHint = document.getElementById('openrouterHint');
+    const geminiHint = document.getElementById('geminiHint');
     const productInput = document.getElementById('product');
     const painPointInput = document.getElementById('painPoint');
 
@@ -244,12 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle API provider change
     apiProvider.addEventListener('change', () => {
-        // Hide all hints
         openaiHint.style.display = 'none';
         groqHint.style.display = 'none';
         openrouterHint.style.display = 'none';
+        geminiHint.style.display = 'none';
 
-        // Show selected provider hint
         switch(apiProvider.value) {
             case 'openai':
                 openaiHint.style.display = 'block';
@@ -259,6 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'openrouter':
                 openrouterHint.style.display = 'block';
+                break;
+            case 'gemini':
+                geminiHint.style.display = 'block';
                 break;
         }
     });
@@ -313,13 +337,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     'X-Title': 'FB Ads Copy Generator'
                 },
                 model: 'mistralai/mixtral-8x7b-instruct'
+            },
+            gemini: {
+                url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                getUrl: (apiKey) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+                formatRequest: (messages) => ({
+                    contents: [{
+                        parts: [{
+                            text: messages.map(m => `${m.role}: ${m.content}`).join('\n\n')
+                        }]
+                    }]
+                }),
+                formatResponse: (data) => ({
+                    choices: [{
+                        message: {
+                            content: data.candidates[0].content.parts[0].text
+                        }
+                    }]
+                })
             }
         };
 
         const selectedAPI = apiConfig[provider];
+        let response;
+        let data;
 
-        try {
-            const response = await fetch(selectedAPI.url, {
+        if (provider === 'gemini') {
+            response = await fetch(selectedAPI.getUrl(apiKey), {
+                method: 'POST',
+                headers: selectedAPI.headers,
+                body: JSON.stringify(selectedAPI.formatRequest([{
+                    role: "system",
+                    content: language === 'ms' ? 
+                        `Anda adalah pakar pengiklanan dari Malaysia...` : 
+                        `You are a professional copywriter...`
+                }, {
+                    role: "user",
+                    content: language === 'ms' ?
+                        `Tuliskan iklan Facebook...` :
+                        `Act as a world class copywriter...`
+                }]))
+            });
+            const rawData = await response.json();
+            data = selectedAPI.formatResponse(rawData);
+        } else {
+            // Existing API call format for other providers
+            response = await fetch(provider === 'openrouter' ? selectedAPI.url : selectedAPI.url, {
                 method: 'POST',
                 headers: selectedAPI.headers,
                 body: JSON.stringify({
@@ -327,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     messages: [{
                         role: "system",
                         content: language === 'ms' ? 
-                            `Anda adalah pakar pengiklanan dari Malaysia yang mahir dalam penulisan iklan Facebook dalam Bahasa Malaysia.
+                            `Anda adalah pakar pengiklanan dari Malaysia.
                              Penting:
                              1. Guna Bahasa Malaysia standard seperti yang digunakan di Malaysia, BUKAN Bahasa Indonesia
                              2. Guna 'kan' bukan 'kan' atau 'kah'
@@ -406,22 +472,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     temperature: 0.7
                 })
             });
+            data = await response.json();
+        }
 
-            const data = await response.json();
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
 
-            if (data.error) {
-                throw new Error(data.error.message);
-            }
-
-            resultDiv.innerText = data.choices[0].message.content;
+        resultDiv.innerText = data.choices[0].message.content;
+        try {
             copyBtn.classList.remove('hidden');
-
         } catch (error) {
             resultDiv.innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
         } finally {
             loadingDiv.classList.add('hidden');
         }
-    }
+}
 
     function copyToClipboard() {
         const textToCopy = resultDiv.innerText;
