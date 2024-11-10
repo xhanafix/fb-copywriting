@@ -327,11 +327,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     messages: [{
                         role: "system",
                         content: language === 'ms' ? 
-                            `Anda adalah seorang pakar pengiklan profesional yang mahir dalam penulisan iklan dalam Bahasa Malaysia. 
-                             Gunakan tatabahasa dan struktur ayat Bahasa Malaysia yang betul dan formal.
-                             Elakkan penggunaan Bahasa Melayu pasar atau bahasa campuran.
-                             Pastikan penggunaan imbuhan dan kata hubung yang tepat.
-                             Gunakan istilah pemasaran dalam Bahasa Malaysia yang standard.` 
+                            `Anda adalah pakar pengiklanan dari Malaysia yang mahir dalam penulisan iklan Facebook dalam Bahasa Malaysia.
+                             Penting:
+                             1. Guna Bahasa Malaysia standard seperti yang digunakan di Malaysia, BUKAN Bahasa Indonesia
+                             2. Guna 'kan' bukan 'kan' atau 'kah'
+                             3. Guna 'yang' bukan 'yg'
+                             4. Guna 'tidak' atau 'tak' bukan 'nggak' atau 'gak'
+                             5. Guna 'saya' dan 'anda' bukan 'aku' dan 'kamu'
+                             6. Elak guna bahasa pasar atau bahasa rojak
+                             7. Ikut struktur ayat Bahasa Malaysia yang betul
+                             8. Guna istilah yang biasa digunakan di Malaysia
+                             
+                             Contoh ayat yang betul:
+                             - "Adakah anda sedang mencari penyelesaian?"
+                             - "Dapatkan sekarang dengan harga istimewa"
+                             - "Jangan tunggu lagi, hubungi kami hari ini"
+                             
+                             Contoh ayat yang SALAH (jangan guna):
+                             - "Apakah anda sedang mencari solusi?"
+                             - "Dapatkan sekarang dengan harga spesial"
+                             - "Jangan tunggu lagi, hubungi kita hari ini"` 
                             : 
                             `You are a professional copywriter who writes in ${languageName}. 
                              Always respond in ${languageName} only.`
@@ -339,46 +354,54 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                         role: "user",
                         content: language === 'ms' ?
-                            `Tuliskan salinan iklan Facebook untuk produk/perkhidmatan ini: ${product}. 
-                             Masalah pelanggan sasaran: ${painPoint}
+                            `Tuliskan iklan Facebook untuk produk/perkhidmatan ini: ${product}. 
+                             Masalah pelanggan: ${painPoint}
                              ${formulaContexts[formula]}
                              Nada suara: ${tone}
 
                              Arahan penting:
-                             1. Mulakan dengan ayat pembuka yang menarik perhatian
-                             2. Gunakan Bahasa Malaysia yang standard dan betul
-                             3. Tulis dalam nada yang mesra dan mudah difahami
-                             4. Masukkan emoji yang sesuai untuk menarik perhatian
-                             5. Gunakan perenggan pendek dan mudah dibaca
+                             1. Mesti guna Bahasa Malaysia standard (Malaysia)
+                             2. Mulakan dengan ayat pembuka yang menarik
+                             3. Guna bahasa yang mesra tetapi profesional
+                             4. Masukkan emoji yang sesuai
+                             5. Guna perenggan pendek dan mudah dibaca
                              6. Buat kandungan yang peribadi dan relevan
-                             7. Elakkan penggunaan bahasa teknikal yang rumit
-                             8. Sertakan seruan untuk bertindak yang jelas
-                             9. Ikut struktur formula yang dipilih dengan tepat
+                             7. Elak bahasa teknikal yang rumit
+                             8. Sertakan seruan tindakan yang jelas
+                             9. Ikut struktur formula yang dipilih
                              
                              Panduan tambahan:
-                             - Gunakan "anda" bukan "awak" atau "kamu"
-                             - Gunakan imbuhan yang betul (ber-, ter-, me-, dll)
-                             - Pastikan susunan ayat subjek-predikat yang betul
-                             - Gunakan kata hubung yang sesuai
-                             - Kekalkan konsistensi dalam penggunaan istilah
+                             - Guna perkataan Malaysia: "kedai" bukan "toko"
+                             - Guna "percuma" bukan "gratis"
+                             - Guna "promosi" bukan "promo"
+                             - Guna "diskaun" bukan "diskon"
+                             - Guna "tempahan" bukan "pesanan"
+                             - Guna "muat turun" bukan "unduh"
+                             - Guna "kongsi" bukan "bagikan"
                              
-                             Sila hasilkan salinan iklan yang meyakinkan dan fokus pada penukaran.`
-                            :
-                            `Act as a world class copywriter. Write a Facebook ad copy in ${languageName} for this product/service: ${product}. 
-                             Target audience pain point: ${painPoint}
-                             ${formulaContexts[formula]}
-                             Tone of voice: ${tone}
+                             Contoh seruan tindakan yang betul:
+                             - "Hubungi kami sekarang"
+                             - "Tempah sekarang"
+                             - "Klik di sini untuk maklumat lanjut"
+                             - "Dapatkan tawaran istimewa hari ini"
+                             
+                             Sila hasilkan iklan yang meyakinkan dalam Bahasa Malaysia standard.`
+                        :
+                        `Act as a world class copywriter. Write a Facebook ad copy in ${languageName} for this product/service: ${product}. 
+                         Target audience pain point: ${painPoint}
+                         ${formulaContexts[formula]}
+                         Tone of voice: ${tone}
 
-                             Important instructions:
-                             1. Start with strong hookline to grab attention
-                             2. The entire response MUST be in ${languageName} only
-                             3. Write in a conversational, human-like tone
-                             4. Add suitable emojis to make the copy engaging
-                             5. Use short paragraphs and make it scannable
-                             6. Make it feel personal and relatable
-                             7. Avoid corporate jargon
-                             8. Include a clear call-to-action in ${languageName}
-                             9. Follow the selected formula structure strictly`
+                         Important instructions:
+                         1. Start with strong hookline to grab attention
+                         2. The entire response MUST be in ${languageName} only
+                         3. Write in a conversational, human-like tone
+                         4. Add suitable emojis to make the copy engaging
+                         5. Use short paragraphs and make it scannable
+                         6. Make it feel personal and relatable
+                         7. Avoid corporate jargon
+                         8. Include a clear call-to-action in ${languageName}
+                         9. Follow the selected formula structure strictly`
                     }],
                     temperature: 0.7
                 })
