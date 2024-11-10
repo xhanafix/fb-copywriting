@@ -566,21 +566,26 @@ button:active::after {
 
 .footer-links {
     display: flex;
-    gap: 1rem;
+    justify-content: center;
 }
 
 .footer-links a {
     color: #1877f2;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+    background: rgba(24, 119, 242, 0.1);
 }
 
 .footer-links a:hover {
     color: #166fe5;
+    background: rgba(24, 119, 242, 0.2);
+    transform: translateY(-2px);
 }
 
 .footer svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 /* Dark mode support for footer */
@@ -599,6 +604,32 @@ button:active::after {
 
     .footer-links a:hover {
         color: #60a5fa;
+    }
+}
+
+/* Add these to your footer styles */
+.made-with-love {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.heart {
+    display: inline-block;
+    animation: heartBeat 1.5s infinite;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@media (prefers-color-scheme: dark) {
+    .made-with-love {
+        color: #e4e6eb;
     }
 }
   
