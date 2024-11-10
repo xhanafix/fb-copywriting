@@ -129,7 +129,7 @@ const productPainPoints = {
         'Need for faster turnaround times'
     ],
     'content tool': [
-        'Writer's block and creative fatigue',
+        'Writer\'s block and creative fatigue',
         'Slow content production process',
         'Inconsistent content quality',
         'High cost of content creation',
@@ -221,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const openaiHint = document.getElementById('openaiHint');
     const groqHint = document.getElementById('groqHint');
     const openrouterHint = document.getElementById('openrouterHint');
+    const productInput = document.getElementById('product');
+    const painPointInput = document.getElementById('painPoint');
 
     // Define copywriting formula contexts
     const formulaContexts = {
@@ -384,8 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const productInput = document.getElementById('product');
-    const painPointInput = document.getElementById('painPoint');
     const painPointSuggestions = document.createElement('div');
     painPointSuggestions.className = 'pain-point-suggestions';
     painPointInput.parentNode.appendChild(painPointSuggestions);
