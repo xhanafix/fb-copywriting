@@ -426,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add click event listener to suggestions
     painPointSuggestions.addEventListener('click', (e) => {
-        if (e.target.classList.contains('suggestion')) {
+        if (e.target.classList.contains('suggestion') && !e.target.classList.contains('loading') && !e.target.classList.contains('error')) {
             painPointInput.value = e.target.textContent;
             painPointSuggestions.style.display = 'none';
         }
@@ -436,6 +436,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         if (!painPointSuggestions.contains(e.target) && e.target !== painPointInput) {
             painPointSuggestions.style.display = 'none';
+        }
+    });
+
+    // Add this to handle pain point suggestions
+    painPointInput.addEventListener('focus', () => {
+        if (painPointSuggestions.children.length > 0) {
+            painPointSuggestions.style.display = 'block';
         }
     });
 }); 
