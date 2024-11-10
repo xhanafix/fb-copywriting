@@ -541,4 +541,64 @@ button:active::after {
         background: #3b82f6;
     }
 }
+
+/* Add these footer styles */
+.footer {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-links a {
+    color: #1877f2;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #166fe5;
+}
+
+.footer svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Dark mode support for footer */
+@media (prefers-color-scheme: dark) {
+    .footer {
+        background: #242526;
+    }
+
+    .footer p {
+        color: #e4e6eb;
+    }
+
+    .footer-links a {
+        color: #3b82f6;
+    }
+
+    .footer-links a:hover {
+        color: #60a5fa;
+    }
+}
   
