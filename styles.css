@@ -396,4 +396,149 @@ button:active::after {
     background: white;
     z-index: 1000;
 }
+
+/* Add these new loading animation styles */
+.loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.loading-animation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.typing-dots {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #1877f2;
+    font-weight: 600;
+}
+
+.dots {
+    display: flex;
+    margin-left: 4px;
+}
+
+.dots span {
+    animation: dotFade 1.5s infinite;
+    opacity: 0;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes dotFade {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.pencil {
+    position: relative;
+    width: 200px;
+    height: 40px;
+    animation: pencilMove 3s infinite;
+}
+
+.pencil-body {
+    position: absolute;
+    width: 70%;
+    height: 12px;
+    left: 15%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, #ffd700, #ffc107);
+    border-radius: 6px;
+}
+
+.pencil-point {
+    position: absolute;
+    left: 85%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid #2b2b2b;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+}
+
+.pencil-eraser {
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    background: #ff6b6b;
+    border-radius: 3px;
+}
+
+.pencil-lines {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    height: 3px;
+}
+
+.pencil-lines::before,
+.pencil-lines::after {
+    content: '';
+    position: absolute;
+    height: 3px;
+    background: #1877f2;
+    opacity: 0;
+    animation: lineWrite 3s infinite;
+}
+
+.pencil-lines::before {
+    left: 0;
+    width: 40%;
+}
+
+.pencil-lines::after {
+    right: 0;
+    width: 30%;
+}
+
+@keyframes pencilMove {
+    0% { transform: translateX(-20px); }
+    50% { transform: translateX(20px); }
+    100% { transform: translateX(-20px); }
+}
+
+@keyframes lineWrite {
+    0% { opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0; }
+}
+
+/* Dark mode support for loading animation */
+@media (prefers-color-scheme: dark) {
+    .typing-dots {
+        color: #3b82f6;
+    }
+    
+    .pencil-body {
+        background: linear-gradient(90deg, #ffd700, #ffc107);
+    }
+    
+    .pencil-point {
+        border-left-color: #fff;
+    }
+    
+    .pencil-lines::before,
+    .pencil-lines::after {
+        background: #3b82f6;
+    }
+}
   

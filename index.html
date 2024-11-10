@@ -88,7 +88,22 @@
 
         <div class="result-container">
             <h2>Generated Copy</h2>
-            <div id="loading" class="loading hidden">Generating...</div>
+            <div id="loading" class="loading hidden">
+                <div class="loading-animation">
+                    <div class="typing-dots">
+                        <span>AI is writing</span>
+                        <div class="dots">
+                            <span>.</span><span>.</span><span>.</span>
+                        </div>
+                    </div>
+                    <div class="pencil">
+                        <div class="pencil-body"></div>
+                        <div class="pencil-point"></div>
+                        <div class="pencil-eraser"></div>
+                        <div class="pencil-lines"></div>
+                    </div>
+                </div>
+            </div>
             <div id="result" class="copy-result"></div>
             <button id="copy" class="copy-button hidden">Copy to Clipboard</button>
         </div>
