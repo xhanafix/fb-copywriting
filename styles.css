@@ -632,31 +632,4 @@ button:active::after {
         color: #e4e6eb;
     }
 }
-
-.language-detection-notification {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background: #1877f2;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    margin-top: 4px;
-    animation: fadeInOut 3s ease-in-out;
-    z-index: 1000;
-}
-
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translateY(-10px); }
-    10% { opacity: 1; transform: translateY(0); }
-    90% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-10px); }
-}
-
-@media (prefers-color-scheme: dark) {
-    .language-detection-notification {
-        background: #3b82f6;
-    }
-}
   
