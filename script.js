@@ -28,6 +28,39 @@ function shareOnTelegram() {
     window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
 }
 
+// Add this function after the existing functions
+async function detectLanguage(text) {
+    const provider = elements.apiProvider.value;
+    const config = apiConfig[provider];
+    
+    try {
+        const response = await fetch(config.url, {
+            method: 'POST',
+            headers: config.headers(elements.apiKey.value),
+            body: JSON.stringify({
+                model: config.model,
+                messages: [{
+                    role: "system",
+                    content: "You are a language detection expert. Respond only with the ISO 639-1 language code."
+                }, {
+                    role: "user",
+                    content: `Detect the language of this text and respond only with the ISO 639-1 language code (e.g., 'en' for English, 'ms' for Malay, etc): "${text}"`
+                }],
+                temperature: 0.1
+            })
+        });
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
+        
+        const languageCode = data.choices[0].message.content.trim().toLowerCase();
+        return languageCode;
+    } catch (error) {
+        console.error('Error detecting language:', error);
+        return 'en'; // Default to English if detection fails
+    }
+}
+
 // Main application code
 document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
@@ -147,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         painPointSuggestions.innerHTML = '<div class="suggestion loading">Generating pain points...</div>';
         painPointSuggestions.style.display = 'block';
 
+        // Detect language and generate pain points
         const painPoints = await generatePainPoints();
         
         if (painPoints && painPoints.length > 0) {
@@ -176,8 +210,17 @@ document.addEventListener('DOMContentLoaded', () => {
     async function generatePainPoints() {
         const provider = elements.apiProvider.value;
         const config = apiConfig[provider];
+        const productText = elements.productInput.value;
         
         try {
+            // Detect the language of the product input
+            const detectedLanguage = await detectLanguage(productText);
+            
+            // Update the language selector to match the detected language
+            if (elements.language.value !== detectedLanguage) {
+                elements.language.value = detectedLanguage;
+            }
+
             const response = await fetch(config.url, {
                 method: 'POST',
                 headers: config.headers(elements.apiKey.value),
@@ -185,12 +228,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     model: config.model,
                     messages: [{
                         role: "system",
-                        content: "You are a marketing expert who helps identify critical customer pain points."
+                        content: `You are a marketing expert who helps identify critical customer pain points. Respond in the same language as the input (${detectedLanguage}).`
                     }, {
                         role: "user",
-                        content: `List 5 critical pain points that customers might face when considering this product/service: ${elements.productInput.value}. 
+                        content: `List 5 critical pain points that customers might face when considering this product/service: ${productText}. 
                                  Format the response as a JSON array of strings, with each pain point being specific, emotional, and compelling.
-                                 Example format: ["pain point 1", "pain point 2", "pain point 3", "pain point 4", "pain point 5"]`
+                                 Example format: ["pain point 1", "pain point 2", "pain point 3", "pain point 4", "pain point 5"]
+                                 Respond in the same language as the input.`
                     }],
                     temperature: 0.7
                 })
