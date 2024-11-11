@@ -28,6 +28,58 @@ function shareOnTelegram() {
     window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
 }
 
+// Add these language detection helper functions at the top level
+const languagePatterns = {
+    zh: /[\u4E00-\u9FFF\u3400-\u4DBF\u20000-\u2A6DF\u2A700-\u2B73F\u2B740-\u2B81F\u2B820-\u2CEAF]/, // Chinese characters
+    ta: /[\u0B80-\u0BFF]/, // Tamil characters
+    ms: /^[a-zA-Z\s]*(?:lah|kan|nya|untuk|dan|atau|yang|di|ke|dari|dengan|dalam|pada|kepada|oleh|seperti|sudah|telah|akan|sedang|masih|tentang|bagi|sejak|ketika|apabila|jika|kalau|saya|anda|dia|mereka|ini|itu|tersebut)\b/i, // Common Malay words and patterns
+    en: /^[a-zA-Z\s\d.,!?'"()-]+$/, // English characters and common punctuation
+    es: /^[a-zA-Z\s]*(?:el|la|los|las|un|una|unos|unas|y|o|de|del|al|con|por|para|en|sobre|entre|detrás|después|ante|antes|contra|hacia)\b/i, // Spanish patterns
+    fr: /^[a-zA-Z\s]*(?:le|la|les|un|une|des|et|ou|de|du|au|aux|avec|par|pour|en|sur|sous|dans|derrière|après|avant|contre|vers)\b/i, // French patterns
+    de: /^[a-zA-Z\s]*(?:der|die|das|ein|eine|und|oder|von|mit|bei|seit|vor|nach|aus|auf|in|über|unter|neben|zwischen|hinter)\b/i, // German patterns
+    it: /^[a-zA-Z\s]*(?:il|lo|la|i|gli|le|un|uno|una|e|o|di|da|in|con|su|per|tra|fra|contro|verso)\b/i  // Italian patterns
+};
+
+function detectLanguage(text) {
+    if (!text) return null;
+    
+    // Remove numbers and special characters for better detection
+    const cleanText = text.trim();
+    
+    // Check for Chinese characters
+    if (languagePatterns.zh.test(cleanText)) {
+        return 'zh';
+    }
+    
+    // Check for Tamil characters
+    if (languagePatterns.ta.test(cleanText)) {
+        return 'ta';
+    }
+    
+    // For other languages, check the patterns and count matches
+    const langScores = {};
+    
+    for (const [lang, pattern] of Object.entries(languagePatterns)) {
+        if (lang === 'zh' || lang === 'ta') continue; // Skip already checked languages
+        
+        // Count how many words match the pattern
+        const words = cleanText.split(/\s+/);
+        const matches = words.filter(word => pattern.test(word)).length;
+        langScores[lang] = matches / words.length;
+    }
+    
+    // Find the language with the highest score
+    const entries = Object.entries(langScores);
+    if (entries.length === 0) return null;
+    
+    const [detectedLang, highestScore] = entries.reduce((max, curr) => 
+        curr[1] > max[1] ? curr : max
+    );
+    
+    // Return detected language only if the score is above a threshold
+    return highestScore > 0.2 ? detectedLang : 'en'; // Default to English if no clear match
+}
+
 // Main application code
 document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
@@ -133,7 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleProductInput() {
-        if (!elements.productInput.value) {
+        const productText = elements.productInput.value;
+        
+        if (!productText) {
             painPointSuggestions.style.display = 'none';
             return;
         }
@@ -142,6 +196,21 @@ document.addEventListener('DOMContentLoaded', () => {
             painPointSuggestions.innerHTML = '<div class="suggestion error">Please enter an API key first</div>';
             painPointSuggestions.style.display = 'block';
             return;
+        }
+
+        // Detect language of input
+        const detectedLanguage = detectLanguage(productText);
+        if (detectedLanguage) {
+            // Update language selector if the detected language is in our options
+            const languageSelect = elements.language;
+            const options = Array.from(languageSelect.options);
+            const matchingOption = options.find(option => option.value === detectedLanguage);
+            
+            if (matchingOption) {
+                languageSelect.value = detectedLanguage;
+                // Optional: Show a notification that language was auto-detected
+                showLanguageDetectionNotification(detectedLanguage);
+            }
         }
 
         painPointSuggestions.innerHTML = '<div class="suggestion loading">Generating pain points...</div>';
@@ -283,5 +352,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.copyBtn.classList.remove('success');
             }, 2000);
         });
+    }
+
+    // Add this helper function to show a notification when language is detected
+    function showLanguageDetectionNotification(lang) {
+        const languageNames = {
+            en: 'English',
+            ms: 'Bahasa Malaysia',
+            zh: 'Chinese',
+            ta: 'Tamil',
+            es: 'Spanish',
+            fr: 'French',
+            de: 'German',
+            it: 'Italian'
+        };
+
+        const notification = document.createElement('div');
+        notification.className = 'language-detection-notification';
+        notification.textContent = `Language detected: ${languageNames[lang]}`;
+        
+        // Add the notification near the language selector
+        const languageSelect = elements.language;
+        languageSelect.parentNode.appendChild(notification);
+        
+        // Remove the notification after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 }); 
