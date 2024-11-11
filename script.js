@@ -80,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
             openai: document.getElementById('openaiHint'),
             groq: document.getElementById('groqHint'),
             openrouter: document.getElementById('openrouterHint')
-        }
+        },
+        themeToggle: document.getElementById('themeToggle'),
     };
 
     // Create pain point suggestions container
@@ -143,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.productInput.addEventListener('input', debounce(handleProductInput, 1000));
     painPointSuggestions.addEventListener('click', handleSuggestionClick);
     document.addEventListener('click', handleClickOutside);
+    elements.themeToggle.addEventListener('change', handleThemeChange);
 
     // Functions
     function updateApiHints() {
@@ -328,4 +330,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         });
     }
+
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        elements.themeToggle.value = savedTheme;
+    }
+
+    function handleThemeChange(e) {
+        const theme = e.target.value;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }
+
+    initializeTheme();
 }); 
