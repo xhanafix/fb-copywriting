@@ -28,42 +28,6 @@ function shareOnTelegram() {
     window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
 }
 
-// Add this function after the existing functions
-async function detectLanguage(text) {
-    const provider = elements.apiProvider.value;
-    const config = apiConfig[provider];
-    
-    try {
-        const response = await fetch(config.url, {
-            method: 'POST',
-            headers: config.headers(elements.apiKey.value),
-            body: JSON.stringify({
-                model: config.model,
-                messages: [{
-                    role: "system",
-                    content: "You are a language detection expert. Respond only with the ISO 639-1 language code from the supported languages: en, ms, zh, ta, es, fr, de, it. If the language is not in this list, return 'en'."
-                }, {
-                    role: "user",
-                    content: `Detect the language of this text and respond only with the ISO 639-1 language code: "${text}"`
-                }],
-                temperature: 0.1
-            })
-        });
-
-        const data = await response.json();
-        if (data.error) throw new Error(data.error.message);
-        
-        const languageCode = data.choices[0].message.content.trim().toLowerCase();
-        
-        // Verify if the detected language is supported
-        const supportedLanguages = ['en', 'ms', 'zh', 'ta', 'es', 'fr', 'de', 'it'];
-        return supportedLanguages.includes(languageCode) ? languageCode : 'en';
-    } catch (error) {
-        console.error('Error detecting language:', error);
-        return 'en'; // Default to English if detection fails
-    }
-}
-
 // Main application code
 document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
@@ -83,8 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             openai: document.getElementById('openaiHint'),
             groq: document.getElementById('groqHint'),
             openrouter: document.getElementById('openrouterHint')
-        },
-        themeToggle: document.getElementById('themeToggle'),
+        }
     };
 
     // Create pain point suggestions container
@@ -147,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.productInput.addEventListener('input', debounce(handleProductInput, 1000));
     painPointSuggestions.addEventListener('click', handleSuggestionClick);
     document.addEventListener('click', handleClickOutside);
-    elements.themeToggle.addEventListener('click', handleThemeChange);
 
     // Functions
     function updateApiHints() {
@@ -171,9 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleProductInput() {
-        const productText = elements.productInput.value;
-        
-        if (!productText) {
+        if (!elements.productInput.value) {
             painPointSuggestions.style.display = 'none';
             return;
         }
@@ -187,28 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
         painPointSuggestions.innerHTML = '<div class="suggestion loading">Generating pain points...</div>';
         painPointSuggestions.style.display = 'block';
 
-        try {
-            // Detect language of the product input
-            const detectedLanguage = await detectLanguage(productText);
-            
-            // Update the language selector to match detected language
-            if (elements.language.value !== detectedLanguage) {
-                elements.language.value = detectedLanguage;
-            }
-
-            // Generate pain points in detected language
-            const painPoints = await generatePainPoints(detectedLanguage);
-            
-            if (painPoints && painPoints.length > 0) {
-                painPointSuggestions.innerHTML = painPoints
-                    .map(point => `<div class="suggestion">${point}</div>`)
-                    .join('');
-            } else {
-                painPointSuggestions.innerHTML = '<div class="suggestion error">Failed to generate pain points. Please try again.</div>';
-            }
-        } catch (error) {
-            console.error('Error in handleProductInput:', error);
-            painPointSuggestions.innerHTML = '<div class="suggestion error">An error occurred. Please try again.</div>';
+        const painPoints = await generatePainPoints();
+        
+        if (painPoints && painPoints.length > 0) {
+            painPointSuggestions.innerHTML = painPoints
+                .map(point => `<div class="suggestion">${point}</div>`)
+                .join('');
+        } else {
+            painPointSuggestions.innerHTML = '<div class="suggestion error">Failed to generate pain points. Please try again.</div>';
         }
     }
 
@@ -227,10 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function generatePainPoints(detectedLanguage) {
+    async function generatePainPoints() {
         const provider = elements.apiProvider.value;
         const config = apiConfig[provider];
-        const productText = elements.productInput.value;
         
         try {
             const response = await fetch(config.url, {
@@ -240,13 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     model: config.model,
                     messages: [{
                         role: "system",
-                        content: `You are a marketing expert who helps identify critical customer pain points. Respond in ${detectedLanguage} language.`
+                        content: "You are a marketing expert who helps identify critical customer pain points."
                     }, {
                         role: "user",
-                        content: `List 5 critical pain points that customers might face when considering this product/service: ${productText}. 
+                        content: `List 5 critical pain points that customers might face when considering this product/service: ${elements.productInput.value}. 
                                  Format the response as a JSON array of strings, with each pain point being specific, emotional, and compelling.
-                                 Example format: ["pain point 1", "pain point 2", "pain point 3", "pain point 4", "pain point 5"]
-                                 Respond in ${detectedLanguage} language.`
+                                 Example format: ["pain point 1", "pain point 2", "pain point 3", "pain point 4", "pain point 5"]`
                     }],
                     temperature: 0.7
                 })
@@ -340,19 +284,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         });
     }
-
-    function initializeTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-
-    function handleThemeChange() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-    }
-
-    initializeTheme();
 }); 
